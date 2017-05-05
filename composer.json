@@ -2,7 +2,8 @@
     "name": "opstalent/elastica-bundle",
     "type": "symfony-bundle",
     "require": {
-        "opstalent/apibundle": "^0.1.1",
+        "php": "^7",
+        "opstalent/apibundle": "dev-master",
         "friendsofsymfony/elastica-bundle": "^4.0"
     },
     "license": "MIT",
@@ -12,5 +13,12 @@
             "email": "patgrudniewski@gmail.com"
         }
     ],
-    "minimum-stability": "stable"
+    "autoload": {
+        "psr-0": {
+            "Opstalent\\ElasticaBundle": ""
+        },
+        "psr-4": {
+            "Opstalent\\ElasticaBundle\\": ""
+        }
+    }
 }
