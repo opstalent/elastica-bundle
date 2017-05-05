@@ -1,0 +1,16 @@
+{
+    "name": "opstalent/elastica-bundle",
+    "type": "symfony-bundle",
+    "require": {
+        "opstalent/apibundle": "^0.1.1",
+        "friendsofsymfony/elastica-bundle": "^4.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Patryk Grudniewski",
+            "email": "patgrudniewski@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
