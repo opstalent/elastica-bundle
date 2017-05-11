@@ -70,4 +70,12 @@ class BoolQueryBuilder extends AbstractQueryBuilder
         
         $this->addMust($range);
     }
+    
+    /**
+     * @return BoolQueryBuilder
+     */
+    public function inner() : BoolQueryBuilder
+    {
+        return $this;
+    }
 }
