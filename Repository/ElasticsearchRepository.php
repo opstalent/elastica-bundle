@@ -3,7 +3,6 @@
 namespace Opstalent\ElasticaBundle\Repository;
 
 use FOS\ElasticaBundle\Finder\TransformedFinder;
-use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
 use Opstalent\ApiBundle\Event\RepositoryEvent;
 use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
@@ -14,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @package Opstalent\ElasticaBundle
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  */
-class ElasticsearchRepository implements SearchableRepositoryInterface
+class ElasticsearchRepository implements ElasticsearchRepositoryInterface
 {
     /**
      * @var array

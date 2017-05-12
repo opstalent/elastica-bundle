@@ -3,7 +3,6 @@
 namespace Opstalent\ElasticaBundle\Repository;
 
 use Opstalent\ApiBundle\Repository\PersistableRepositoryInterface as PersistableRepository;
-use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface as SearchableRepository;
 
 /**
  * @package Opstalent\ElasticaBundle
@@ -11,7 +10,7 @@ use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface as SearchableRe
  */
 class ElasticsearchPersistableRepository implements
     PersistableRepository,
-    SearchableRepository
+    ElasticsearchRepositoryInterface
 {
     /**
      * @var PersistableRepository

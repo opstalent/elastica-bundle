@@ -1,1 +1,7 @@
 services:
+    ops_elastica.repository_factory:
+        class: Opstalent\ElasticaBundle\Repository\RepositoryFactory
+        arguments:
+            - '@fos_elastica.config_manager'
+            - '@service_container'
+            - '@event_dispatcher'
