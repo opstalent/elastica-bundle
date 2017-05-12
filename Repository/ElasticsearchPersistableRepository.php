@@ -23,10 +23,10 @@ class ElasticsearchPersistableRepository implements
     protected $searchableRepository;
 
     /**
-     * @param PersistableRepoistory $persistableRepository
-     * @param ElasticsearchRepository $searchableRepository
+     * @param PersistableRepoistory $persistable
+     * @param ElasticsearchRepositoryInterface $searchable
      */
-    public function __construct(PersistableRepository $persistable, SearchableRepository $searchable)
+    public function __construct(PersistableRepository $persistable, ElasticsearchRepositoryInterface $searchable)
     {
         $this->persistableRepository = $persistable;
         $this->searchableRepository = $searchable;
