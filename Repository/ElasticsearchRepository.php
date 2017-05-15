@@ -49,6 +49,14 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher)
     {
         parent::__construct($finder);
+        $this->setEventDispatcher($dispatcher);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
+    {
         $this->dispatcher = $dispatcher;
     }
 

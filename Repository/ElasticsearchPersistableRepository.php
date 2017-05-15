@@ -4,6 +4,9 @@ namespace Opstalent\ElasticaBundle\Repository;
 
 use Opstalent\ApiBundle\Repository\PersistableRepositoryInterface as PersistableRepository;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface as SearchableRepository;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @package Opstalent\ElasticaBundle
@@ -11,7 +14,8 @@ use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface as SearchableRe
  */
 class ElasticsearchPersistableRepository implements
     PersistableRepository,
-    SearchableRepository
+    SearchableRepository,
+    EventDispatcherInterface
 {
     /**
      * @var PersistableRepository
@@ -24,13 +28,96 @@ class ElasticsearchPersistableRepository implements
     protected $searchableRepository;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    /**
      * @param PersistableRepoistory $persistable
      * @param SearchableRepository $searchable
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(PersistableRepository $persistable, SearchableRepository $searchable)
+    public function __construct(PersistableRepository $persistable, SearchableRepository $searchable, EventDispatcherInterface $dispatcher)
     {
+        $this->setEventDispatcher($dispatcher);
+
         $this->persistableRepository = $persistable;
         $this->searchableRepository = $searchable;
+
+        $this->persistableRepository->setEventDispatcher($this);
+        $this->searchableRepository->setEventDispatcher($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dispatch($eventName, Event $event = null)
+    {
+        $this->dispatcher->dispatch($eventName, $event);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addListener($eventName, $listener, $priority = 0)
+    {
+        $this->dispatcher->addListener($eventName, $listener, $priority);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addSubscriber(EventSubscriberInterface $subscriber)
+    {
+        $this->dispatcher->addSubscriber($subscriber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeListener($eventName, $listener)
+    {
+        $this->dispatcher->removeListener($eventName, $listener);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeSubscriber(EventSubscriberInterface $subscriber)
+    {
+        $this->dispatcher->removeSubscriber($subscriber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListeners($eventName = null)
+    {
+        return $this->dispatcher->getListeners($eventName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        return $this->dispatcher->getListenerPriority($eventName, $listener);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasListeners($eventName = null)
+    {
+        return $this->dispatcher->hasListeners($eventName);
     }
 
     /**
