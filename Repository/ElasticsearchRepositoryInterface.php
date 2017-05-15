@@ -10,4 +10,8 @@ use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
  */
 interface ElasticsearchRepositoryInterface extends SearchableRepositoryInterface
 {
+    /**
+     * @return array
+     */
+    public function getFieldsMapping() : array;
 }

@@ -3,6 +3,7 @@
 namespace Opstalent\ElasticaBundle\Repository;
 
 use Opstalent\ApiBundle\Repository\PersistableRepositoryInterface as PersistableRepository;
+use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface as SearchableRepository;
 
 /**
  * @package Opstalent\ElasticaBundle
@@ -10,7 +11,7 @@ use Opstalent\ApiBundle\Repository\PersistableRepositoryInterface as Persistable
  */
 class ElasticsearchPersistableRepository implements
     PersistableRepository,
-    ElasticsearchRepositoryInterface
+    SearchableRepository
 {
     /**
      * @var PersistableRepository
@@ -24,9 +25,9 @@ class ElasticsearchPersistableRepository implements
 
     /**
      * @param PersistableRepoistory $persistable
-     * @param ElasticsearchRepositoryInterface $searchable
+     * @param SearchableRepository $searchable
      */
-    public function __construct(PersistableRepository $persistable, ElasticsearchRepositoryInterface $searchable)
+    public function __construct(PersistableRepository $persistable, SearchableRepository $searchable)
     {
         $this->persistableRepository = $persistable;
         $this->searchableRepository = $searchable;

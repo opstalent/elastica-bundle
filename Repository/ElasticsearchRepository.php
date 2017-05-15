@@ -38,6 +38,11 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     protected $dispatcher;
 
     /**
+     * @var array
+     */
+    protected $mapping = [];
+
+    /**
      * {@inheritdoc}
      * @param EventDispatcherInterface $dispatcher
      */
@@ -45,6 +50,14 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     {
         parent::__construct($finder);
         $this->dispatcher = $dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldsMapping() : array
+    {
+        return $this->mapping;
     }
 
     /**
