@@ -55,6 +55,14 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     {
         return $this->query;
     }
+    
+    /**
+     * @return AbstractQueryBuilder
+     */
+    public function inner() : AbstractQueryBuilder
+    {
+        return $this;
+    }
 
     /**
      * @return Query\AbstractQuery

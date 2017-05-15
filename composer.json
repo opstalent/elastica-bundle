@@ -6,7 +6,11 @@
         "opstalent/apibundle": "dev-master",
         "friendsofsymfony/elastica-bundle": "^4.0",
         "symfony/http-kernel": "^3.2",
-        "symfony/event-dispatcher": "^3.2"
+        "symfony/event-dispatcher": "^3.2",
+        "symfony/dependency-injection": "^3.2",
+        "symfony/config": "^3.2",
+        "symfony/serializer": "^3.2",
+        "doctrine/annotations": "^1.4"
     },
     "license": "MIT",
     "authors": [

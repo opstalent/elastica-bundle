@@ -3,10 +3,11 @@
 namespace Opstalent\ElasticaBundle\Repository;
 
 use FOS\ElasticaBundle\Finder\TransformedFinder;
-use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
+use FOS\ElasticaBundle\Repository;
 use Opstalent\ApiBundle\Event\RepositoryEvent;
 use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
+use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
 use Opstalent\ElasticaBundle\QueryBuilder\QueryBuilderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -14,7 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @package Opstalent\ElasticaBundle
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  */
-class ElasticsearchRepository implements SearchableRepositoryInterface
+class ElasticsearchRepository extends Repository implements ElasticsearchRepositoryInterface
 {
     /**
      * @var array
@@ -37,13 +38,26 @@ class ElasticsearchRepository implements SearchableRepositoryInterface
     protected $dispatcher;
 
     /**
-     * @param TransformedFinder $finder
+     * @var array
+     */
+    protected $mapping = [];
+
+    /**
+     * {@inheritdoc}
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher)
     {
-        $this->finder = $finder;
+        parent::__construct($finder);
         $this->dispatcher = $dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldsMapping() : array
+    {
+        return $this->mapping;
     }
 
     /**

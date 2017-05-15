@@ -1,0 +1,22 @@
+services:
+    ops_elastica.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+              - '@opstalent.api_bundle.normalizer.datetime'
+              - '@ops_elastica.serializer.normalizer.entity'
+              - '@serializer.normalizer.object'
+            - ['@serializer.encoder.json']
+
+    ops_elastica.serializer.normalizer.entity:
+        class: Opstalent\ElasticaBundle\Serializer\Normalizer\EntityNormalizer
+        public: false
+        arguments:
+            - '@ops_elastica.repository_factory'
+
+    ops_elastica.repository_factory:
+        class: Opstalent\ElasticaBundle\Repository\RepositoryFactory
+        arguments:
+            - '@fos_elastica.config_manager'
+            - '@service_container'
+            - '@event_dispatcher'
