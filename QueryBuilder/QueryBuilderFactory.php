@@ -20,6 +20,8 @@ class QueryBuilderFactory
                 return new BoolQueryBuilder();
             case 'match':
                 return new MatchQueryBuilder();
+            case 'wildcard':
+                return new WildcardQueryBuilder();
             default:
                 throw new \UnexpectedValueException(sprintf('Factory for type "%s" is not defined', $type));
         }
