@@ -20,6 +20,8 @@ class QueryBuilderFactory
                 return new BoolQueryBuilder();
             case 'match':
                 return new MatchQueryBuilder();
+            case 'range':
+                return new RangeQueryBuilder();
             case 'wildcard':
                 return new WildcardQueryBuilder();
             default:
