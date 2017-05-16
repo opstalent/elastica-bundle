@@ -3,13 +3,12 @@
 namespace Opstalent\ElasticaBundle\QueryBuilder;
 
 use Elastica\Query;
-use Opstalent\ApiBundle\QueryBuilder\QueryBuilderInterface;
 
 /**
  * @package Opstalent\ElasticaBundle
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  */
-abstract class AbstractQueryBuilder implements QueryBuilderInterface
+abstract class AbstractQueryBuilder
 {
     /**
      * @var Query
@@ -54,14 +53,6 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     public function getQuery() : Query
     {
         return $this->query;
-    }
-    
-    /**
-     * @return AbstractQueryBuilder
-     */
-    public function inner() : AbstractQueryBuilder
-    {
-        return $this;
     }
 
     /**
