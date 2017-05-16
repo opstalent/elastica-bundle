@@ -8,7 +8,7 @@ use Elastica\Query;
  * @package Opstalent\ElasticaBundle
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  */
-class BoolQueryBuilder extends AbstractQueryBuilder
+class BoolQueryBuilder extends CompoundQueryBuilder
 {
     /**
      * {@inheritdoc}
