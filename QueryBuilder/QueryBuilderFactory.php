@@ -18,6 +18,8 @@ class QueryBuilderFactory
         switch ($type) {
             case 'bool':
                 return new BoolQueryBuilder();
+            case 'match':
+                return new MatchQueryBuilder();
             default:
                 throw new \UnexpectedValueException(sprintf('Factory for type "%s" is not defined', $type));
         }
