@@ -23,19 +23,22 @@ class BoolQueryBuilder extends CompoundQueryBuilder
                 $this->datetimeFilter($field, $value);
                 break;
             default:
-                $match = new Query\Match($field, $value);
-                $this->addMust($match);
+                $match = QueryBuilderFactory::create('match')
+                    ->setQuery($field, $value);
+                $this->addMust($match->getQuery());
                 break;
         }
     }
 
     /**
-     * @param Query\AbstractQuery $query
+     * @param Query $query
      */
-    public function addMust(Query\AbstractQuery $query)
+    public function addMust(Query $query) : BoolQueryBuilder
     {
         $this->query->getQuery()
-            ->addMust($query);
+            ->addMust($query->getQuery());
+
+        return $this;
     }
 
     /**
@@ -52,8 +55,10 @@ class BoolQueryBuilder extends CompoundQueryBuilder
      */
     protected function wildcardStringFilter(string $field, string $value)
     {
-        $wildcard = new Query\Wildcard($field, '*' . strtolower($value) . '*');
-        $this->addMust($wildcard);
+        $wildcard = QueryBuilderFactory::create('wildcard')
+            ->setQuery($field, '*' . $value . '*');
+
+        $this->addMust($wildcard->getQuery());
     }
 
     /**
@@ -63,6 +68,12 @@ class BoolQueryBuilder extends CompoundQueryBuilder
     protected function datetimeFilter(string $field, \DateTime $value)
     {
         $value = $value->format('Y-m-d\TH:i:s');
+        $rande = QueryBuilderFactory::create('range')
+            ->setField($field)
+            ->setFrom($value . '||+1m/m', false)
+            ->setTo($vale . '||/m', true)
+            ;
+
         $range = new Query\Range($field, [
             'lt' => $value . '||+1m/m',
             'gte' => $value . '||/m',
