@@ -1,3 +1,8 @@
+parameters:
+    ops_elastica.serializer.circularReferenceHandler:
+        - 'Opstalent\ElasticaBundle\Serializer\CircularReferenceHandler'
+        - 'handle'
+
 services:
     ops_elastica.serializer:
         class: Symfony\Component\Serializer\Serializer
@@ -5,7 +10,7 @@ services:
             -
               - '@opstalent.api_bundle.normalizer.datetime'
               - '@ops_elastica.serializer.normalizer.entity'
-              - '@serializer.normalizer.object'
+              - '@ops_elastica.serializer.normalizer.object'
             - ['@serializer.encoder.json']
 
     ops_elastica.serializer.normalizer.entity:
@@ -13,6 +18,14 @@ services:
         public: false
         arguments:
             - '@ops_elastica.repository_factory'
+        calls:
+            - [setCircularReferenceHandler, ['%ops_elastica.serializer.circularReferenceHandler%']]
+
+    ops_elastica.serializer.normalizer.object:
+        parent: 'serializer.normalizer.object'
+        public: false
+        calls:
+            - [setCircularReferenceHandler, ['%ops_elastica.serializer.circularReferenceHandler%']]
 
     ops_elastica.repository_factory:
         class: Opstalent\ElasticaBundle\Repository\RepositoryFactory

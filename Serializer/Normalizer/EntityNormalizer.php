@@ -77,14 +77,6 @@ class EntityNormalizer extends ObjectNormalizer
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function handleCircularReference($object)
-    {
-        return null;
-    }
-
-    /**
      * @param string $classname
      * @return bool
      */
