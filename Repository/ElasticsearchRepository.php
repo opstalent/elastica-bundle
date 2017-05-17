@@ -8,6 +8,7 @@ use Opstalent\ApiBundle\Event\RepositoryEvent;
 use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
+use Opstalent\ElasticaBundle\Query\TemplateBuilder;
 use Opstalent\ElasticaBundle\QueryBuilder\QueryBuilderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -43,6 +44,11 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     protected $mapping = [];
 
     /**
+     * @var array
+     */
+    private $templates = [];
+
+    /**
      * {@inheritdoc}
      * @param EventDispatcherInterface $dispatcher
      */
@@ -50,6 +56,16 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     {
         parent::__construct($finder);
         $this->setEventDispatcher($dispatcher);
+    }
+
+    /**
+     * @param string $templateName
+     * @param array $template
+     */
+    public function setQueryTemplate(string $templateName, array $template)
+    {
+        $template = TemplateBuilder::fromArray($template);
+        $this->templates[$templateName] = $template;
     }
 
     /**
