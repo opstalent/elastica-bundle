@@ -33,4 +33,20 @@ class SubitemTermCollectionTemplate extends TermCollectionTemplate
         $this->subitemFrom = $subitemFrom;
         $this->subitemMap = $subitemMap;
     }
+
+    /**
+     * @return string
+     */
+    public function getSubitemFrom() : string
+    {
+        return $this->subitemFrom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubitemMap() : string
+    {
+        return $this->subitemMap;
+    }
 }

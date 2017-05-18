@@ -30,4 +30,20 @@ abstract class AbstractTemplate implements QueryInterface
     {
         $this->boost = $boost;
     }
+
+    /**
+     * @return float
+     */
+    public function getBoost() : float
+    {
+        return $this->boost;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResolverClass() : string
+    {
+        return static::class . 'Resolver';
+    }
 }

@@ -33,4 +33,12 @@ class Container
     {
         $this->minimumScore = $score;
     }
+
+    /**
+     * @return AbstractTemplate
+     */
+    public function getQueryTemplate() : AbstractTemplate
+    {
+        return $this->query;
+    }
 }

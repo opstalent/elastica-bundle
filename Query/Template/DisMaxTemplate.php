@@ -20,4 +20,12 @@ class DisMaxTemplate extends AbstractTemplate
     {
         $this->subqueries[] = $query;
     }
+
+    /**
+     * @return array
+     */
+    public function getSubqueries() : array
+    {
+        return $this->subqueries;
+    }
 }

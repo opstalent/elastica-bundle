@@ -7,6 +7,7 @@ use FOS\ElasticaBundle\Configuration\ManagerInterface;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 use Opstalent\ElasticaBundle\Annotation\Entity;
 use Opstalent\ElasticaBundle\Exception\MappingException;
+use Opstalent\ElasticaBundle\Query\Template\ContainerResolver;
 use Opstalent\ElasticaBundle\Repository\ElasticsearchRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -43,16 +44,22 @@ class RepositoryFactory
     protected $eventDispatcher;
 
     /**
+     * @var ContainerResolver
+     */
+    protected $templateResolver;
+
+    /**
      * @param ConfigManager $configManager
      * @param ContainerInterface $container
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(ManagerInterface $configManager, ContainerInterface $container, EventDispatcherInterface $dispatcher)
+    public function __construct(ManagerInterface $configManager, ContainerInterface $container, EventDispatcherInterface $dispatcher, ContainerResolver $resolver)
     {
         $this->annotationReader = new AnnotationReader();
         $this->configManager = $configManager;
         $this->serviceContainer = $container;
         $this->eventDispatcher = $dispatcher;
+        $this->templateResolver = $resolver;
     }
 
     /**
@@ -64,7 +71,7 @@ class RepositoryFactory
         if (!array_key_exists($class, $this->repositories)) {
             $repositoryClass = $this->resolveRepositoryClass(new \ReflectionClass($class));
             $finder = $this->resolveFinder($class);
-            $this->repositories[$class] = new $repositoryClass($finder, $this->eventDispatcher);
+            $this->repositories[$class] = new $repositoryClass($finder, $this->eventDispatcher, $this->templateResolver);
         }
 
         return $this->repositories[$class];

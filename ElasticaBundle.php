@@ -2,6 +2,7 @@
 
 namespace Opstalent\ElasticaBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -10,4 +11,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ElasticaBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        $container
+            ->addCompilerPass(new DependencyInjection\Compiler\QueryTemplateResolverPass())
+            ;
+    }
 }

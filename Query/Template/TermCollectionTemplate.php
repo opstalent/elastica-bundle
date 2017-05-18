@@ -8,7 +8,7 @@ use Opstalent\ElasticaBundle\Query\Boost\DistributionInterface as Distribution;
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
  */
-class TermCollectionTemplate extends AbstractTemplate
+class TermCollectionTemplate extends AbstractTemplate implements CollectionTemplateInterface
 {
     /**
      * @var string
@@ -38,5 +38,29 @@ class TermCollectionTemplate extends AbstractTemplate
         $this->source = $source;
         $this->field = $field;
         $this->distribution = $dist;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource() : string
+    {
+        return $this->source;
+    }
+
+    /**
+     * @return string
+     */
+    public function getField() : string
+    {
+        return $this->field;
+    }
+
+    /**
+     * @return Distribution
+     */
+    public function getDistribution() : Distribution
+    {
+        return $this->distribution;
     }
 }

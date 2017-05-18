@@ -9,6 +9,7 @@ use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
 use Opstalent\ElasticaBundle\Query\TemplateBuilder;
+use Opstalent\ElasticaBundle\Query\Template\ContainerResolver;
 use Opstalent\ElasticaBundle\QueryBuilder\QueryBuilderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -44,6 +45,11 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     protected $mapping = [];
 
     /**
+     * @var ContainerResolver
+     */
+    protected $templateResolver;
+
+    /**
      * @var array
      */
     private $templates = [];
@@ -52,9 +58,12 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
      * {@inheritdoc}
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher)
+    public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher, ContainerResolver $resolver)
     {
         parent::__construct($finder);
+
+        $this->templateResolver = $resolver;
+
         $this->setEventDispatcher($dispatcher);
     }
 

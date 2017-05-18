@@ -32,4 +32,12 @@ class FunctionScoreTemplate extends AbstractTemplate
         $this->query = $query;
         $this->scriptScore = $scriptScore;
     }
+
+    /**
+     * @return QueryInterface
+     */
+    public function getQuery() : QueryInterface
+    {
+        return $this->query;
+    }
 }
