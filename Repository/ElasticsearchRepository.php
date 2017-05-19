@@ -10,6 +10,7 @@ use Opstalent\ApiBundle\Event\RepositorySearchEvent;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
 use Opstalent\ElasticaBundle\Query\TemplateBuilder;
 use Opstalent\ElasticaBundle\Query\Template\ContainerResolver;
+use Opstalent\ElasticaBundle\QueryBuilder\CompoundQueryBuilder;
 use Opstalent\ElasticaBundle\QueryBuilder\QueryBuilderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -65,6 +66,17 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
         $this->templateResolver = $resolver;
 
         $this->setEventDispatcher($dispatcher);
+    }
+
+    /**
+     * @param CompoundQueryBuilder $qb
+     * @param string $template
+     * @param object $data
+     */
+    public function extendQueryFromTemplate(CompoundQueryBuilder $qb, string $template, $data)
+    {
+        $query = $this->templateResolver->resolve($this->templates[$template], $data, $this->getFieldsMapping());
+        $qb->merge($query);
     }
 
     /**
