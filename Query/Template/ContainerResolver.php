@@ -35,6 +35,11 @@ class ContainerResolver
             'query' => $this->resolverFactory->getInstance($template)->resolve($template, $data, $mapping),
         ];
 
+        $minScore = $container->getMinimumScore();
+        if (null !== $minScore) {
+            $query['min_score'] = $minScore;
+        }
+
         return new Query($query);
     }
 

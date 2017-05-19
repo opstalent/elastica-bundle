@@ -35,6 +35,14 @@ class Container
     }
 
     /**
+     * @return float
+     */
+    public function getMinimumScore() : float
+    {
+        return $this->minimumScore;
+    }
+
+    /**
      * @return AbstractTemplate
      */
     public function getQueryTemplate() : AbstractTemplate
