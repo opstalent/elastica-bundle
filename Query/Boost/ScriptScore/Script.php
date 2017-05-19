@@ -43,4 +43,28 @@ class Script implements ScriptScoreInterface
     {
         return $this->provider;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResolverClass() : string
+    {
+        return static::class . 'Resolver';
+    }
+
+    /**
+     * @return string
+     */
+    public function getInline() : string
+    {
+        return $this->inline;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType() : string
+    {
+        return 'script';
+    }
 }

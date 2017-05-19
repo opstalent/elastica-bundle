@@ -39,8 +39,16 @@ services:
         class: Opstalent\ElasticaBundle\Query\Template\TemplateResolverFactory
         public: false
 
+    ops_elastica.query.script_score_resolver_factory:
+        class: Opstalent\ElasticaBundle\Query\Boost\ScriptScore\ResolverFactory
+        public: false
+
     ops_elastica.query.distribution_provider_factory:
         class: Opstalent\ElasticaBundle\Query\Boost\DistributionProviderFactory
+        public: false
+
+    ops_elastica.query.script_score.param_provider_factory:
+        class: Opstalent\ElasticaBundle\Query\Boost\ScriptScore\ParamProviderFactory
         public: false
 
     ops_elastica.query.template_resolver.bool:
@@ -79,9 +87,18 @@ services:
         class: Opstalent\ElasticaBundle\Query\Template\FunctionScoreTemplateResolver
         arguments:
             - '@ops_elastica.query.template_resolver_factory'
+            - '@ops_elastica.query.script_score_resolver_factory'
         public: false
         tags:
             - { name: ops_elastica.query_template_resolver }
+
+    ops_elastica.query.script_score_resolver.script:
+        class: Opstalent\ElasticaBundle\Query\Boost\ScriptScore\ScriptResolver
+        public: false
+        arguments:
+            - '@ops_elastica.query.script_score.param_provider_factory'
+        tags:
+            - { name: ops_elastica.query_script_score_resolver }
 
     ops_elastica.query.container_resolver:
         class: Opstalent\ElasticaBundle\Query\Template\ContainerResolver

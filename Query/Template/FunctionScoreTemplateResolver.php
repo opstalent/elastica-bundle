@@ -2,6 +2,8 @@
 
 namespace Opstalent\ElasticaBundle\Query\Template;
 
+use Opstalent\ElasticaBundle\Query\Boost\ScriptScore\ResolverFactory;
+
 /**
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
@@ -14,11 +16,18 @@ class FunctionScoreTemplateResolver implements TemplateResolverInterface
     protected $resolverFactory;
 
     /**
-     * @param TemplateResolverFactory $factory
+     * @var ResolverFactory
      */
-    public function __construct(TemplateResolverFactory $factory)
+    protected $scriptScoreResolverFactory;
+
+    /**
+     * @param TemplateResolverFactory $tFactory
+     * @param ResolverFactory $srciptScoreFactory
+     */
+    public function __construct(TemplateResolverFactory $templateFactory, ResolverFactory $scriptScoreFactory)
     {
-        $this->resolverFactory = $factory;
+        $this->templateResolverFactory = $templateFactory;
+        $this->scriptScoreResolverFactory = $scriptScoreFactory;
     }
 
     /**
@@ -28,14 +37,19 @@ class FunctionScoreTemplateResolver implements TemplateResolverInterface
     {
         $query = $template->getQuery();
         if ($query instanceof AbstractTemplate) {
-            $resolver = $this->resolverFactory->getInstance($query);
-            $query = $resolver->resolve($query, $data, $mapping);
+            $templateResolver = $this->templateResolverFactory->getInstance($query);
+            $query = $templateResolver->resolve($query, $data, $mapping);
         } else {
             $query = $query->getQuery();
         }
 
+        $scriptScoreResolver = $this->scriptScoreResolverFactory->getInstance($template->getScriptScore());
+
         return [
-            'query' => $query,
+            'function_score' => [
+                'query' => $query,
+                'script_score' => $scriptScoreResolver->resolve($template->getScriptScore(), $data),
+            ],
         ];
     }
 }

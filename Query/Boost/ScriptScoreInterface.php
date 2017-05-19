@@ -8,4 +8,13 @@ namespace Opstalent\ElasticaBundle\Query\Boost;
  */
 interface ScriptScoreInterface extends DistributionInterface
 {
+    /**
+     * @return string
+     */
+    public function getType() : string;
+
+    /**
+     * @return string
+     */
+    public function getResolverClass() : string;
 }

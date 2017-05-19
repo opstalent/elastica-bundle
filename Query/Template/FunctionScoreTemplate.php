@@ -40,4 +40,12 @@ class FunctionScoreTemplate extends AbstractTemplate
     {
         return $this->query;
     }
+
+    /**
+     * @return ScriptScoreInterface
+     */
+    public function getScriptScore() : ScriptScoreInterface
+    {
+        return $this->scriptScore;
+    }
 }

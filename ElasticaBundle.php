@@ -15,6 +15,7 @@ class ElasticaBundle extends Bundle
     {
         $container
             ->addCompilerPass(new DependencyInjection\Compiler\QueryTemplateResolverPass())
+            ->addCompilerPass(new DependencyInjection\Compiler\QueryScriptScoreResolverPass())
             ;
     }
 }
