@@ -58,4 +58,36 @@ class SubitemDistribution extends AbstractDistribution
     {
         $this->additable = $additable;
     }
+
+    /**
+     * @param bool
+     */
+    public function isAdditable() : bool
+    {
+        return $this->additable;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBoostArray() : array
+    {
+        return [$this->rootBoost, $this->subitemBoost];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubitemPath() : string
+    {
+        return $this->subitemPath;
+    }
+
+    /**
+     * @return NestedLevelGuesserInterface
+     */
+    public function getLevelGuesser() : NestedLevelGuesserInterface
+    {
+        return $this->levelGuesser;
+    }
 }

@@ -29,7 +29,9 @@ abstract class CompoundTemplateResolver implements TemplateResolverInterface
     public function resolve(AbstractTemplate $template, $data, array $mapping = []) : array
     {
         $query = [
-            $this->getQueryName() => [],
+            $this->getQueryName() => [
+                'boost' => $template->getBoost(),
+            ],
         ];
 
         $propertyAccess = PropertyAccess::createPropertyAccessor();

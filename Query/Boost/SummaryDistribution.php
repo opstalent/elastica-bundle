@@ -6,7 +6,7 @@ namespace Opstalent\ElasticaBundle\Query\Boost;
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
  */
-class SummaryDistribution implements DistributionInterface
+class SummaryDistribution extends AbstractDistribution
 {
     /**
      * @var float

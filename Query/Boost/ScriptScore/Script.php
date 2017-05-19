@@ -35,4 +35,12 @@ class Script implements ScriptScoreInterface
         $this->provider = $providerClass;
         $this->inline = $inline;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProviderClass() : string
+    {
+        return $this->provider;
+    }
 }

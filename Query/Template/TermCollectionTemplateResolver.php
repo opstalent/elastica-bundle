@@ -2,6 +2,9 @@
 
 namespace Opstalent\ElasticaBundle\Query\Template;
 
+use Opstalent\ElasticaBundle\Query\Boost\AbstractDistributionProvider;
+use Opstalent\ElasticaBundle\Query\Boost\CompoundDistributionProvider;
+use Opstalent\ElasticaBundle\Query\Boost\DistributionProviderFactory;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -15,9 +18,18 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
      */
     protected $propertyAccess;
 
-    public function __construct()
+    /**
+     * @var DistributionProviderFactory
+     */
+    protected $distributionFactory;
+
+    /**
+     * @param DistributionProviderFactory $factory
+     */
+    public function __construct(DistributionProviderFactory $factory)
     {
         $this->propertyAccess = PropertyAccess::createPropertyAccessor();
+        $this->distributionFactory = $factory;
     }
 
     /**
@@ -28,11 +40,16 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
         $query = [];
 
         $field = $this->map($template->getField(), $mapping);
-
         $source = $this->propertyAccess->getValue($data, $template->getSource());
+
+        $distribution = $this->distributionFactory->getInstance($template->getDistribution());
+        if ($distribution instanceof CompoundDistributionProvider) {
+            $distribution->setCount(count($source));
+        }
+
         foreach ($source as $item) {
             $query[] = [
-                'term' => [$field => $this->resolveItem($item)],
+                'term' => [$field => $this->resolveItem($item, $distribution)],
             ];
         }
 
@@ -41,14 +58,16 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
 
     /**
      * @param object|scalar $item
+     * @param AbstractDistributionProvider
      * @return array
      */
-    protected function resolveItem($item) : array
+    protected function resolveItem($item, AbstractDistributionProvider $provider) : array
     {
         $value = is_object($item) ? $this->propertyAccess->getValue($item, 'id') : $item;
 
         return [
             'value' => $value,
+            'boost' => $provider->getValue($item),
         ];
     }
 

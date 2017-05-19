@@ -8,4 +8,8 @@ namespace Opstalent\ElasticaBundle\Query\Boost;
  */
 interface DistributionInterface
 {
+    /**
+     * @return string
+     */
+    public function getProviderClass() : string;
 }

@@ -6,7 +6,7 @@ namespace Opstalent\ElasticaBundle\Query\Boost;
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
  */
-class QuadraticDistribution implements DistributionInterface
+class QuadraticDistribution extends AbstractDistribution
 {
     /**
      * @var float
@@ -31,5 +31,21 @@ class QuadraticDistribution implements DistributionInterface
 
         $this->from = $from;
         $this->to = $to;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFrom() : float
+    {
+        return $this->from;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTo() : float
+    {
+        return $this->to;
     }
 }

@@ -39,6 +39,10 @@ services:
         class: Opstalent\ElasticaBundle\Query\Template\TemplateResolverFactory
         public: false
 
+    ops_elastica.query.distribution_provider_factory:
+        class: Opstalent\ElasticaBundle\Query\Boost\DistributionProviderFactory
+        public: false
+
     ops_elastica.query.template_resolver.bool:
         class: Opstalent\ElasticaBundle\Query\Template\BoolTemplateResolver
         arguments:
@@ -51,6 +55,22 @@ services:
         class: Opstalent\ElasticaBundle\Query\Template\DisMaxTemplateResolver
         arguments:
             - '@ops_elastica.query.template_resolver_factory'
+        public: false
+        tags:
+            - { name: ops_elastica.query_template_resolver }
+
+    ops_elastica.query.template_resolver.term_collection:
+        class: Opstalent\ElasticaBundle\Query\Template\TermCollectionTemplateResolver
+        arguments:
+            - '@ops_elastica.query.distribution_provider_factory'
+        public: false
+        tags:
+            - { name: ops_elastica.query_template_resolver }
+
+    ops_elastica.query.template_resolver.subitem_term_collection:
+        class: Opstalent\ElasticaBundle\Query\Template\SubitemTermCollectionTemplateResolver
+        arguments:
+            - '@ops_elastica.query.distribution_provider_factory'
         public: false
         tags:
             - { name: ops_elastica.query_template_resolver }
