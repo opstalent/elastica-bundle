@@ -3,6 +3,8 @@
 namespace Opstalent\ElasticaBundle\QueryBuilder;
 
 use Elastica\Query;
+use Opstalent\ElasticaBundle\Exception\UnsupportedQueryTypeException;
+use Opstalent\ElasticaBundle\Query\Query as QueryContainer;
 
 /**
  * @package Opstalent\ElasticaBundle
@@ -31,12 +33,46 @@ class BoolQueryBuilder extends CompoundQueryBuilder
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function merge(QueryContainer $query) : CompoundQueryBuilder
+    {
+        $data = $query->getQuery();
+        $type = array_keys($data['query'])[0];
+        if ('bool' != $type) {
+            throw new UnsupportedQueryTypeException('bool');
+        }
+
+        foreach ($data['query']['bool']['should'] as $should) {
+            $this->addShould(new Query(['query' => $should]));
+        }
+
+        unset($data['query']);
+        foreach ($data as $key => $value) {
+            $this->query->setParam($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param Query $query
      */
     public function addMust(Query $query) : BoolQueryBuilder
     {
         $this->query->getQuery()
             ->addMust($query->getQuery());
+
+        return $this;
+    }
+
+    /**
+     * @param Query $query
+     */
+    public function addShould(Query $query) : BoolQueryBuilder
+    {
+        $this->query->getQuery()
+            ->addShould($query->getQuery());
 
         return $this;
     }

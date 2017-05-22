@@ -8,6 +8,9 @@ use Opstalent\ApiBundle\Event\RepositoryEvent;
 use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
+use Opstalent\ElasticaBundle\Query\TemplateBuilder;
+use Opstalent\ElasticaBundle\Query\Template\ContainerResolver;
+use Opstalent\ElasticaBundle\QueryBuilder\CompoundQueryBuilder;
 use Opstalent\ElasticaBundle\QueryBuilder\QueryBuilderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -43,13 +46,47 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     protected $mapping = [];
 
     /**
+     * @var ContainerResolver
+     */
+    protected $templateResolver;
+
+    /**
+     * @var array
+     */
+    private $templates = [];
+
+    /**
      * {@inheritdoc}
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher)
+    public function __construct(TransformedFinder $finder, EventDispatcherInterface $dispatcher, ContainerResolver $resolver)
     {
         parent::__construct($finder);
+
+        $this->templateResolver = $resolver;
+
         $this->setEventDispatcher($dispatcher);
+    }
+
+    /**
+     * @param CompoundQueryBuilder $qb
+     * @param string $template
+     * @param object $data
+     */
+    public function extendQueryFromTemplate(CompoundQueryBuilder $qb, string $template, $data)
+    {
+        $query = $this->templateResolver->resolve($this->templates[$template], $data, $this->getFieldsMapping());
+        $qb->merge($query);
+    }
+
+    /**
+     * @param string $templateName
+     * @param array $template
+     */
+    public function setQueryTemplate(string $templateName, array $template)
+    {
+        $template = TemplateBuilder::fromArray($template);
+        $this->templates[$templateName] = $template;
     }
 
     /**

@@ -48,6 +48,15 @@ abstract class AbstractQueryBuilder
     }
 
     /**
+     * @param $minScore
+     */
+    public function setMinimumScore(float $minScore)
+    {
+        $this->query
+            ->setMinScore($minScore);
+    }
+
+    /**
      * @return Query
      */
     public function getQuery() : Query
