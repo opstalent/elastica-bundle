@@ -46,8 +46,14 @@ class BoolQueryBuilder extends CompoundQueryBuilder
         foreach ($data['query']['bool']['should'] as $should) {
             $this->addShould(new Query(['query' => $should]));
         }
+        unset($data['query']['bool']['should']);
 
+        foreach ($data['query']['bool'] as $key => $value) {
+            $this->query->getQuery()
+                ->setParam($key, $value);
+        }
         unset($data['query']);
+
         foreach ($data as $key => $value) {
             $this->query->setParam($key, $value);
         }
