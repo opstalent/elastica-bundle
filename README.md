@@ -49,3 +49,12 @@ fos_elastica:
    serializer: 
        serializer: 'ops_elastica.serializer'
 ```
+
+To enable transformer for Elasticsearch responses add following to your `app/config/config.yml`:
+
+```yml
+# app/config/config.yml
+
+parameters:
+    fos_elastica.elastica_to_model_transformer.prototype.orm.class: Opstalent\ElasticaBundle\Transformer\ElasticaToModelTransformer
+```
