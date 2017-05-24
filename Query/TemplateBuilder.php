@@ -53,6 +53,9 @@ class TemplateBuilder
             case 'dis_max':
                 $query = static::resolveDisMaxQuery($source);
                 break;
+            case 'terms':
+                $query = static::resolveTermsQuery($source);
+                break;
             case 'term_collection':
                 $query = static::resolveTermCollectionQuery($source);
                 break;
@@ -118,6 +121,25 @@ class TemplateBuilder
         foreach ($source['subquery'] as $subquery) {
             $template->addSubquery(static::resolveQuery($subquery));
         }
+
+        return $template;
+    }
+
+    /**
+     * @param array $source
+     * @return Template\TermsTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveTermsQuery(array $source) : Template\TermsTemplate
+    {
+        if (!array_key_exists('from', $source)) {
+            throw new InvalidTemplateDefinitionException('Terms source not defined');
+        }
+        if (!array_key_exists('map', $source)) {
+            throw new InvalidTemplateDefinitionException('Terms field not defined');
+        }
+
+        $template = new Template\TermsTemplate($source['from'], $source['map']);
 
         return $template;
     }

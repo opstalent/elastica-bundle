@@ -75,6 +75,8 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
      * @param string $field
      * @param array $mapping
      * @return string
+     *
+     * @TODO: move to service
      */
     protected function map(string $field, array $mapping) : string
     {
