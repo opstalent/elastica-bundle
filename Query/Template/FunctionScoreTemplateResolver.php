@@ -45,11 +45,18 @@ class FunctionScoreTemplateResolver implements TemplateResolverInterface
 
         $scriptScoreResolver = $this->scriptScoreResolverFactory->getInstance($template->getScriptScore());
 
-        return [
+        $query = [
             'function_score' => [
                 'query' => $query,
                 'script_score' => $scriptScoreResolver->resolve($template->getScriptScore(), $data),
+                'boost' => $template->getBoost(),
             ],
         ];
+
+        if (null !== $template->getMinimumScore()) {
+            $query['function_score']['min_score'] = $template->getMinimumScore();
+        }
+
+        return $query;
     }
 }

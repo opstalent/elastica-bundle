@@ -32,7 +32,7 @@ class ScriptResolver implements ResolverInterface
 
         return [
             'script' => [
-                'params' => $provider->getParameters($data),
+                'params' => (object) $provider->getParameters($data),
                 'inline' => $score->getInline(),
             ],
         ];

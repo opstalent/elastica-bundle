@@ -23,6 +23,7 @@ class BoolTemplateResolver extends CompoundTemplateResolver
     {
         return [
             'should' => '[should]',
+            'must' => '[must]',
         ];
     }
 }
