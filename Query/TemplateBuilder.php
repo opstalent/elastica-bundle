@@ -94,6 +94,11 @@ class TemplateBuilder
                 $template->addShould(static::resolveQuery($should));
             }
         }
+        if (array_key_exists('must', $source)) {
+            foreach ($source['must'] as $must) {
+                $template->addMust(static::resolveQuery($must));
+            }
+        }
 
         return $template;
     }
