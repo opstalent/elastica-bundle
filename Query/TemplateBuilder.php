@@ -217,9 +217,14 @@ class TemplateBuilder
         if (!array_key_exists('script_score', $source)) {
             throw new InvalidTemplateDefinitionException('FunctionScore script score not defined');
         }
-        $scriptScore = static::resolveScriptScore($source['script_score']);
 
-        return new Template\FunctionScoreTemplate($subquery, $scriptScore);
+        $scriptScore = static::resolveScriptScore($source['script_score']);
+        $template = new Template\FunctionScoreTemplate($subquery, $scriptScore);
+        if (array_key_exists('min_score', $source)) {
+            $template->setMinimumScore($source['min_score']);
+        }
+
+        return $template;
     }
 
     /**

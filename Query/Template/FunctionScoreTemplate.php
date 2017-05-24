@@ -22,6 +22,11 @@ class FunctionScoreTemplate extends AbstractTemplate
     protected $scriptScore;
 
     /**
+     * @var float|null
+     */
+    protected $minScore;
+
+    /**
      * @param QueryInterface $query
      * @param ScriptScoreInterface $scriptScore
      * {@inheritdoc}
@@ -47,5 +52,24 @@ class FunctionScoreTemplate extends AbstractTemplate
     public function getScriptScore() : ScriptScoreInterface
     {
         return $this->scriptScore;
+    }
+
+    /**
+     * @param float $minScore
+     * @return FunctionScoreTemplate
+     */
+    public function setMinimumScore(float $minScore) : FunctionScoreTemplate
+    {
+        $this->minScore = $minScore;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMinimumScore()
+    {
+        return $this->minScore;
     }
 }
