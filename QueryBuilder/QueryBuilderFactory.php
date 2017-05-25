@@ -22,6 +22,8 @@ class QueryBuilderFactory
                 return new MatchQueryBuilder();
             case 'range':
                 return new RangeQueryBuilder();
+            case 'term':
+                return new TermQueryBuilder();
             case 'wildcard':
                 return new WildcardQueryBuilder();
             default:

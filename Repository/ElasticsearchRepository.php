@@ -2,12 +2,14 @@
 
 namespace Opstalent\ElasticaBundle\Repository;
 
+use Elastica\Query;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 use FOS\ElasticaBundle\Repository;
 use Opstalent\ApiBundle\Event\RepositoryEvent;
 use Opstalent\ApiBundle\Event\RepositoryEvents;
 use Opstalent\ApiBundle\Event\RepositorySearchEvent;
 use Opstalent\ApiBundle\Repository\SearchableRepositoryInterface;
+use Opstalent\ElasticaBundle\Exception\DocumentNotFoundException;
 use Opstalent\ElasticaBundle\Query\TemplateBuilder;
 use Opstalent\ElasticaBundle\Query\Template\ContainerResolver;
 use Opstalent\ElasticaBundle\QueryBuilder\CompoundQueryBuilder;
@@ -66,6 +68,22 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
         $this->templateResolver = $resolver;
 
         $this->setEventDispatcher($dispatcher);
+    }
+
+    /**
+     * @param Query $query
+     * @param array $options
+     * @return object
+     * @throws DocumentNotFoundException
+     */
+    public function findOne(Query $query, array $options = [])
+    {
+        $result = $this->find($query, 1, $options);
+        if (!count($result)) {
+            throw new DocumentNotFoundException($this->entityName, $query);
+        }
+
+        return $result[0];
     }
 
     /**
