@@ -8,6 +8,11 @@ namespace Opstalent\ElasticaBundle\QueryBuilder;
  */
 class QueryBuilderFactory
 {
+    const BOOL = 'bool';
+    const MATCH = 'match';
+    const RANGE = 'range';
+    const WILDCARD = 'wildcard';
+    const TERMS = 'terms';
     /**
      * @param string $type
      * @return AbstractQueryBuilder
@@ -16,14 +21,16 @@ class QueryBuilderFactory
     public static function create(string $type) : AbstractQueryBuilder
     {
         switch ($type) {
-            case 'bool':
+            case self::BOOL:
                 return new BoolQueryBuilder();
-            case 'match':
+            case self::MATCH:
                 return new MatchQueryBuilder();
-            case 'range':
+            case self::RANGE:
                 return new RangeQueryBuilder();
-            case 'wildcard':
+            case self::WILDCARD:
                 return new WildcardQueryBuilder();
+            case self::TERMS:
+                return new TermsQueryBuilder();
             default:
                 throw new \UnexpectedValueException(sprintf('Factory for type "%s" is not defined', $type));
         }
