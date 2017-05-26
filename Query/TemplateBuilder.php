@@ -53,6 +53,9 @@ class TemplateBuilder
             case 'dis_max':
                 $query = static::resolveDisMaxQuery($source);
                 break;
+            case 'terms':
+                $query = static::resolveTermsQuery($source);
+                break;
             case 'term_collection':
                 $query = static::resolveTermCollectionQuery($source);
                 break;
@@ -94,6 +97,11 @@ class TemplateBuilder
                 $template->addShould(static::resolveQuery($should));
             }
         }
+        if (array_key_exists('must', $source)) {
+            foreach ($source['must'] as $must) {
+                $template->addMust(static::resolveQuery($must));
+            }
+        }
 
         return $template;
     }
@@ -113,6 +121,25 @@ class TemplateBuilder
         foreach ($source['subquery'] as $subquery) {
             $template->addSubquery(static::resolveQuery($subquery));
         }
+
+        return $template;
+    }
+
+    /**
+     * @param array $source
+     * @return Template\TermsTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveTermsQuery(array $source) : Template\TermsTemplate
+    {
+        if (!array_key_exists('from', $source)) {
+            throw new InvalidTemplateDefinitionException('Terms source not defined');
+        }
+        if (!array_key_exists('map', $source)) {
+            throw new InvalidTemplateDefinitionException('Terms field not defined');
+        }
+
+        $template = new Template\TermsTemplate($source['from'], $source['map']);
 
         return $template;
     }
@@ -212,9 +239,14 @@ class TemplateBuilder
         if (!array_key_exists('script_score', $source)) {
             throw new InvalidTemplateDefinitionException('FunctionScore script score not defined');
         }
-        $scriptScore = static::resolveScriptScore($source['script_score']);
 
-        return new Template\FunctionScoreTemplate($subquery, $scriptScore);
+        $scriptScore = static::resolveScriptScore($source['script_score']);
+        $template = new Template\FunctionScoreTemplate($subquery, $scriptScore);
+        if (array_key_exists('min_score', $source)) {
+            $template->setMinimumScore($source['min_score']);
+        }
+
+        return $template;
     }
 
     /**

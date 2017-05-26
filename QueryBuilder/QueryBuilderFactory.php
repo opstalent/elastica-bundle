@@ -27,6 +27,8 @@ class QueryBuilderFactory
                 return new MatchQueryBuilder();
             case self::RANGE:
                 return new RangeQueryBuilder();
+            case self::TERMS:
+                return new TermQueryBuilder();
             case self::WILDCARD:
                 return new WildcardQueryBuilder();
             case self::TERMS:

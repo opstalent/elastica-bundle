@@ -14,6 +14,11 @@ class BoolTemplate extends AbstractTemplate
     protected $should = [];
 
     /**
+     * @var array
+     */
+    protected $must = [];
+
+    /**
      * @param AbstractTemplate $query
      */
     public function addShould(AbstractTemplate $query)
@@ -24,8 +29,24 @@ class BoolTemplate extends AbstractTemplate
     /**
      * @return array
      */
-    public function getShould()
+    public function getShould() : array
     {
         return $this->should;
+    }
+
+    /**
+     * @param AbstractTemplate $query
+     */
+    public function addMust(AbstractTemplate $query)
+    {
+        $this->must[] = $query;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMust() : array
+    {
+        return $this->must;
     }
 }
