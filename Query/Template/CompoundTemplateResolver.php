@@ -2,6 +2,7 @@
 
 namespace Opstalent\ElasticaBundle\Query\Template;
 
+use Opstalent\ElasticaBundle\Query\Query;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -67,8 +68,13 @@ abstract class CompoundTemplateResolver implements TemplateResolverInterface
     {
         $part = [];
         foreach ($querries as $template) {
-            $resolver = $this->resolverFactory->getInstance($template);
-            $query = $resolver->resolve($template, $data, $mapping);
+            if ($template instanceof Query) {
+                $query = $template->getQuery();
+            } else {
+                $resolver = $this->resolverFactory->getInstance($template);
+                $query = $resolver->resolve($template, $data, $mapping);
+            }
+
             if ($template instanceof CollectionTemplateInterface) {
                 $part = array_merge($part, $query);
             } else {

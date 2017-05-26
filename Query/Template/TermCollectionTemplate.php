@@ -8,7 +8,7 @@ use Opstalent\ElasticaBundle\Query\Boost\DistributionInterface as Distribution;
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
  */
-class TermCollectionTemplate extends TermsTemplate implements CollectionTemplateInterface
+class TermCollectionTemplate extends TermTemplate implements CollectionTemplateInterface
 {
     /**
      * @var Distribution $dist

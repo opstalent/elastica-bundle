@@ -35,6 +35,9 @@ services:
             - '@event_dispatcher'
             - '@ops_elastica.query.container_resolver'
 
+    ops_elastica.query.field_mapper:
+        class: Opstalent\ElasticaBundle\Query\FieldMapper
+
     ops_elastica.query.template_resolver_factory:
         class: Opstalent\ElasticaBundle\Query\Template\TemplateResolverFactory
         public: false
@@ -67,19 +70,34 @@ services:
         tags:
             - { name: ops_elastica.query_template_resolver }
 
+    ops_elastica.query.template_resolver.term:
+        class: Opstalent\ElasticaBundle\Query\Template\TermTemplateResolver
+        arguments:
+            - '@ops_elastica.query.field_mapper'
+        tags:
+            - { name: ops_elastica.query_template_resolver }
+
     ops_elastica.query.template_resolver.term_collection:
         class: Opstalent\ElasticaBundle\Query\Template\TermCollectionTemplateResolver
         arguments:
             - '@ops_elastica.query.distribution_provider_factory'
+            - '@ops_elastica.query.field_mapper'
+        public: false
+        tags:
+            - { name: ops_elastica.query_template_resolver }
+
+    ops_elastica.query.template.resolver.subitem_term:
+        class: Opstalent\ElasticaBundle\Query\Template\SubitemTermTemplateResolver
+        arguments:
+            - '@ops_elastica.query.distribution_provider_factory'
+            - '@ops_elastica.query.field_mapper'
         public: false
         tags:
             - { name: ops_elastica.query_template_resolver }
 
     ops_elastica.query.template_resolver.subitem_term_collection:
+        parent: ops_elastica.query.template_resolver.term_collection
         class: Opstalent\ElasticaBundle\Query\Template\SubitemTermCollectionTemplateResolver
-        arguments:
-            - '@ops_elastica.query.distribution_provider_factory'
-        public: false
         tags:
             - { name: ops_elastica.query_template_resolver }
 

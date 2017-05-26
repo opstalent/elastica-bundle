@@ -53,17 +53,26 @@ class TemplateBuilder
             case 'dis_max':
                 $query = static::resolveDisMaxQuery($source);
                 break;
+            case 'term':
+                $query = static::resolveTermQuery($source);
+                break;
             case 'terms':
                 $query = static::resolveTermsQuery($source);
                 break;
             case 'term_collection':
                 $query = static::resolveTermCollectionQuery($source);
                 break;
+            case 'subitem_term':
+                $query = static::resolveSubitemTermQuery($source);
+                break;
             case 'subitem_term_collection':
                 $query = static::resolveSubitemTermCollectionQuery($source);
                 break;
             case 'function_score':
                 $query = static::resolveFunctionScoreQuery($source);
+                break;
+            case 'parameterized_query_collection':
+                $query = static::resolveParameterizedQueryCollectionQuery($source);
                 break;
             case 'query':
                 if (!array_key_exists('query', $source)) {
@@ -127,6 +136,25 @@ class TemplateBuilder
 
     /**
      * @param array $source
+     * @return Template\TermTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveTermQuery(array $source) : Template\TermTemplate
+    {
+        if (!array_key_exists('from', $source)) {
+            throw new InvalidTemplateDefinitionException('Term source not defined');
+        }
+        if (!array_key_exists('map', $source)) {
+            throw new InvalidTemplateDefinitionException('Term field not defined');
+        }
+
+        $template = new Template\TermTemplate($source['from'], $source['map']);
+
+        return $template;
+    }
+
+    /**
+     * @param array $source
      * @return Template\TermsTemplate
      * @throws InvalidTemplateDefinitionException
      */
@@ -166,6 +194,62 @@ class TemplateBuilder
         $template = new Template\TermCollectionTemplate($source['from'], $source['map'], $distribution);
 
         return $template;
+    }
+
+    /**
+     * @param array $source
+     * @return Template\SubitemTermTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveSubitemTermQuery(array $source) : Template\SubitemTermTemplate
+    {
+        if (!array_key_exists('from', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm root source not defined');
+        }
+        if (!array_key_exists('map', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm root field not defined');
+        }
+        if (!array_key_exists('subitem_from', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm subitem source not defined');
+        }
+        if (!array_key_exists('subitem_map', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm subitem field not defined');
+        }
+        if (!array_key_exists('subitem_container_path', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm subitem container path not defined');
+        }
+        if (!array_key_exists('level_guesser', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm level guesser not defined');
+        }
+        if (!array_key_exists('distribution', $source)) {
+            throw new InvalidTemplateDefinitionException('SubitemTerm boost distribution not defined');
+        }
+
+        if (!array_key_exists('root', $source['distribution'])) {
+            throw new InvalidTemplateDefinitionException('SubitemDistribution root boost not defined');
+        }
+        if (!array_key_exists('subitem', $source['distribution'])) {
+            throw new InvalidTemplateDefinitionException('SubitemDistribution subitem boost not defined');
+        }
+    
+        $distribution = new Boost\SubitemDistribution(
+            $source['distribution']['root'],
+            $source['distribution']['subitem'],
+            $source['subitem_container_path'],
+            new $source['level_guesser']
+        );
+
+        if (array_key_exists('additable', $source['distribution'])) {
+            $distribution->setAdditable($source['distribution']['additable']);
+        }
+
+        return new Template\SubitemTermTemplate(
+            $source['from'],
+            $source['map'],
+            $source['subitem_from'],
+            $source['subitem_map'],
+            $distribution
+        );
     }
 
     /**
@@ -245,8 +329,28 @@ class TemplateBuilder
         if (array_key_exists('min_score', $source)) {
             $template->setMinimumScore($source['min_score']);
         }
+        if (array_key_exists('boost_mode', $source)) {
+            $template->setBoostMode($source['boost_mode']);
+        }
 
         return $template;
+    }
+
+    /**
+     * @param array $source
+     * @return Template\ParameterizedQueryCollectionTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveParameterizedQueryCollectionQuery(array $source) : Template\ParameterizedQueryCollectionTemplate
+    {
+        if (!array_key_exists('query', $source)) {
+            throw new InvalidTemplateDefinitionException('ParameterizedQueryCollection query not defined');
+        }
+        if (!array_key_exists('iterator', $source)) {
+            throw new InvalidTemplateDefinitionException('ParameterizedQueryCollection iterator not defined');
+        }
+
+        return new Template\ParameterizedQueryCollectionTemplate($source['query'], $source['iterator']);
     }
 
     /**

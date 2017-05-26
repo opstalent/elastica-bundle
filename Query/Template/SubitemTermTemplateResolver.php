@@ -3,7 +3,6 @@
 namespace Opstalent\ElasticaBundle\Query\Template;
 
 use Opstalent\ElasticaBundle\Query\Boost\AbstractDistributionProvider;
-use Opstalent\ElasticaBundle\Query\Boost\CompoundDistributionProvider;
 use Opstalent\ElasticaBundle\Query\Boost\DistributionProviderFactory;
 use Opstalent\ElasticaBundle\Query\FieldMapper;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -12,23 +11,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
  */
-class TermCollectionTemplateResolver implements TemplateResolverInterface
+class SubitemTermTemplateResolver implements TemplateResolverInterface
 {
-    /**
-     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
-     */
-    protected $propertyAccess;
-
-    /**
-     * @var DistributionProviderFactory
-     */
-    protected $distributionFactory;
-
-    /**
-     * @var FieldMapper
-     */
-    protected $mapper;
-
     /**
      * @param DistributionProviderFactory $factory
      * @param FieldMapper $mapper
@@ -47,17 +31,24 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
     {
         $query = [];
 
-        $field = $this->mapper->map($template->getField(), $mapping);
-        $source = $this->propertyAccess->getValue($data, $template->getSource());
-
         $distribution = $this->distributionFactory->getInstance($template->getDistribution());
-        if ($distribution instanceof CompoundDistributionProvider) {
-            $distribution->setCount(count($source));
-        }
 
-        foreach ($source as $item) {
+        $rootField = $this->mapper->map($template->getField(), $mapping);
+        $rootSource = $this->propertyAccess->getValue($data, $template->getSource());
+
+        $subField = $this->mapper->map($template->getSubitemMap(), $mapping);
+        $subSource = $this->propertyAccess->getValue($data, $template->getSubitemFrom());
+
+        if (null === $rootSource) {
+            return $query;
+        }
+        $query[] = [
+            'term' => [$rootField => $this->resolveItem($rootSource, $distribution)],
+        ];
+
+        if (null !== $subSource) {
             $query[] = [
-                'term' => [$field => $this->resolveItem($item, $distribution)],
+                'term' => [$subField => $this->resolveItem($subSource, $distribution)],
             ];
         }
 
@@ -66,7 +57,7 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
 
     /**
      * @param object|scalar $item
-     * @param AbstractDistributionProvider
+     * @param AbstractDistributionProvider $provider
      * @return array
      */
     protected function resolveItem($item, AbstractDistributionProvider $provider) : array

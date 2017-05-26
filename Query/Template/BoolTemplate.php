@@ -2,6 +2,8 @@
 
 namespace Opstalent\ElasticaBundle\Query\Template;
 
+use Opstalent\ElasticaBundle\Query\QueryInterface;
+
 /**
  * @author Patryk Grudniewski <patgrudniewski@gmail.com>
  * @package Opstalent\ElasticaBundle
@@ -21,7 +23,7 @@ class BoolTemplate extends AbstractTemplate
     /**
      * @param AbstractTemplate $query
      */
-    public function addShould(AbstractTemplate $query)
+    public function addShould(QueryInterface $query)
     {
         $this->should[] = $query;
     }
@@ -37,7 +39,7 @@ class BoolTemplate extends AbstractTemplate
     /**
      * @param AbstractTemplate $query
      */
-    public function addMust(AbstractTemplate $query)
+    public function addMust(QueryInterface $query)
     {
         $this->must[] = $query;
     }
