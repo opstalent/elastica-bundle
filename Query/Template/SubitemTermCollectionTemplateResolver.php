@@ -15,7 +15,6 @@ class SubitemTermCollectionTemplateResolver extends TermCollectionTemplateResolv
      */
     public function resolve(AbstractTemplate $template, $data, array $mapping = []) : array
     {
-        $query = parent::resolve($template, $data, $mapping);
         $query = array_merge(
             parent::resolve($template, $data, $mapping),
             parent::resolve(

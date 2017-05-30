@@ -35,9 +35,9 @@ class Container
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getMinimumScore() : float
+    public function getMinimumScore()
     {
         return $this->minimumScore;
     }

@@ -27,6 +27,11 @@ class FunctionScoreTemplate extends AbstractTemplate
     protected $minScore;
 
     /**
+     * @var string|null
+     */
+    protected $boostMode;
+
+    /**
      * @param QueryInterface $query
      * @param ScriptScoreInterface $scriptScore
      * {@inheritdoc}
@@ -71,5 +76,24 @@ class FunctionScoreTemplate extends AbstractTemplate
     public function getMinimumScore()
     {
         return $this->minScore;
+    }
+
+    /**
+     * @param string $mode
+     * @return FunctionScoreTemplate
+     */
+    public function setBoostMode(string $mode) : FunctionScoreTemplate
+    {
+        $this->boostMode = $mode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBoostMode()
+    {
+        return $this->boostMode;
     }
 }

@@ -56,6 +56,9 @@ class FunctionScoreTemplateResolver implements TemplateResolverInterface
         if (null !== $template->getMinimumScore()) {
             $query['function_score']['min_score'] = $template->getMinimumScore();
         }
+        if (null !== $template->getBoostMode()) {
+            $query['function_score']['boost_mode'] = $template->getBoostMode();
+        }
 
         return $query;
     }
