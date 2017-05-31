@@ -11,7 +11,8 @@
         "symfony/config": "^3.2",
         "doctrine/annotations": "^1.4",
         "symfony/serializer": "^3.2",
-        "symfony/property-access": "^3.2"
+        "symfony/property-access": "^3.2",
+        "pagerfanta/pagerfanta": "^1.0"
     },
     "license": "MIT",
     "authors": [
