@@ -139,14 +139,13 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
 
         $result = [];
         if (array_key_exists('count', $data)) {
-            $result['list'] = $this->finder->findPaginated($qb->getQuery());
-            $result['total'] = count($result['list']);
-
+            $paginator = $this->finder->createPaginatorAdapter($qb->getQuery());
+            $result['list'] = $paginator->getResults($qb->getQuery()->getParam('from'),$qb->getQuery()->getParam('size'))->toArray();
+            $result['total'] = $paginator->getTotalHits(true);
             unset($data['count']);
         } else {
             $result['list'] = $this->finder->find($qb->getQuery());
         }
-
         return $result;
     }
 

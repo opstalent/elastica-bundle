@@ -113,7 +113,7 @@ class BoolQueryBuilder extends CompoundQueryBuilder
         $rande = QueryBuilderFactory::create('range')
             ->setField($field)
             ->setFrom($value . '||+1m/m', false)
-            ->setTo($vale . '||/m', true)
+            ->setTo($value . '||/m', true)
             ;
 
         $range = new Query\Range($field, [
