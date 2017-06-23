@@ -29,23 +29,25 @@ abstract class CompoundTemplateResolver implements TemplateResolverInterface
      */
     public function resolve(AbstractTemplate $template, $data, array $mapping = []) : array
     {
-        $query = [
-            $this->getQueryName() => [
-                'boost' => $template->getBoost(),
-            ],
-        ];
-
+        $query = [];
         $propertyAccess = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->getTemplateMapping() as $source => $dest) {
             $part = $propertyAccess->getValue($template, $source);
             $partQuery = $this->resolvePart($part, $data, $mapping);
+            if (empty($partQuery)) {
+                continue;
+            }
 
-            $dest = sprintf('[%s]%s', $this->getQueryName(), $dest);
+            $dest = sprintf('%s', $dest);
             $propertyAccess->setValue($query, $dest, $partQuery);
         }
 
-        return $query;
+        return empty($query) ? [] : [
+            $this->getQueryName() => array_merge($query, [
+                'boost' => $template->getBoost(),
+            ])
+        ];
     }
 
     /**
@@ -75,7 +77,9 @@ abstract class CompoundTemplateResolver implements TemplateResolverInterface
                 $query = $resolver->resolve($template, $data, $mapping);
             }
 
-            if ($template instanceof CollectionTemplateInterface) {
+            if (empty ($query)) {
+                continue;
+            } elseif ($template instanceof CollectionTemplateInterface) {
                 $part = array_merge($part, $query);
             } else {
                 $part[] = $query;
