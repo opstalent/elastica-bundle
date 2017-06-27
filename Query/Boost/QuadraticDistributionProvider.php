@@ -46,6 +46,10 @@ class QuadraticDistributionProvider extends CompoundDistributionProvider
      */
     protected function calculateValue($data, int $iterator, int $count) : float
     {
+        if (1 == $count) {
+            return $this->to;
+        }
+
         $x = $this->to - $this->range * $iterator / ($count - 1);
         return pow($x, 2);
     }
