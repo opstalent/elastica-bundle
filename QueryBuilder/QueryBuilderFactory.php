@@ -13,6 +13,8 @@ class QueryBuilderFactory
     const RANGE = 'range';
     const WILDCARD = 'wildcard';
     const TERMS = 'terms';
+    const TERM = 'term';
+
     /**
      * @param string $type
      * @return AbstractQueryBuilder
@@ -31,6 +33,8 @@ class QueryBuilderFactory
                 return new WildcardQueryBuilder();
             case self::TERMS:
                 return new TermsQueryBuilder();
+            case self::TERM:
+                return new TermQueryBuilder();
             default:
                 throw new \UnexpectedValueException(sprintf('Factory for type "%s" is not defined', $type));
         }
