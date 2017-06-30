@@ -96,7 +96,7 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     {
         $result = $this->find($query, $limit, $options);
         if (!count($result)) {
-            throw new DocumentNotFoundException($this->entityName, $query);
+           return [];
         }
 
         return $result;

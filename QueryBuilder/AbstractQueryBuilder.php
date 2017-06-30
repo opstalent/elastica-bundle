@@ -54,7 +54,6 @@ abstract class AbstractQueryBuilder
     {
         $this->query
             ->setMinScore($minScore);
-
     }
 
     /**
@@ -64,8 +63,6 @@ abstract class AbstractQueryBuilder
     {
         return $this->query;
     }
-
-
 
     /**
      * @return Query\AbstractQuery
