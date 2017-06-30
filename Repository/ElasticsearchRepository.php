@@ -87,6 +87,22 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
     }
 
     /**
+     * @param $query
+     * @param array $options
+     * @return object
+     * @throws DocumentNotFoundException
+     */
+    public function findAll($query, $limit = NULL , array $options = [])
+    {
+        $result = $this->find($query, $limit, $options);
+        if (!count($result)) {
+            throw new DocumentNotFoundException($this->entityName, $query);
+        }
+
+        return $result;
+    }
+
+    /**
      * @param CompoundQueryBuilder $qb
      * @param string $template
      * @param object $data
