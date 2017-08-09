@@ -17,7 +17,7 @@ class BoolQueryBuilder extends CompoundQueryBuilder
      */
     public function filter(string $field, string $type, $value)
     {
-        switch($type) {
+        switch ($type) {
             case 'string':
                 $this->wildcardStringFilter($field, $value);
                 break;
@@ -43,9 +43,12 @@ class BoolQueryBuilder extends CompoundQueryBuilder
             throw new UnsupportedQueryTypeException('bool');
         }
 
-        foreach ($data['query']['bool']['should'] as $should) {
-            $this->addShould(new Query(['query' => $should]));
+        if (array_key_exists('should', $data['query']['bool'])) {
+            foreach ($data['query']['bool']['should'] as $should) {
+                $this->addShould(new Query(['query' => $should]));
+            }
         }
+
         unset($data['query']['bool']['should']);
 
         foreach ($data['query']['bool'] as $key => $value) {
@@ -113,14 +116,13 @@ class BoolQueryBuilder extends CompoundQueryBuilder
         $rande = QueryBuilderFactory::create('range')
             ->setField($field)
             ->setFrom($value . '||+1m/m', false)
-            ->setTo($value . '||/m', true)
-            ;
+            ->setTo($value . '||/m', true);
 
         $range = new Query\Range($field, [
             'lt' => $value . '||+1m/m',
             'gte' => $value . '||/m',
         ]);
-        
+
         $this->addMust($range);
     }
 }
