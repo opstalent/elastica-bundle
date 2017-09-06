@@ -28,8 +28,7 @@ class ParameterizedQueryCollectionTemplateResolver implements TemplateResolverIn
     {
         $iterator = $this->propertyAccess->getValue($data, $template->getIterator());
         if (!(is_array($iterator) || $iterator instanceof \Traversable)) {
-            $queries[] = $this->resolveTemplate($template->getTemplate(), $iterator); //@TODO: use mapping
-            return $queries;
+            throw new \UnexpectedValueException('Invalid iterator for ParameterizedQueryCollectionTemplate');
         }
 
         $queries = [];
