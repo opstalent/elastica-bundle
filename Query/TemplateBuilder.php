@@ -231,7 +231,7 @@ class TemplateBuilder
         if (!array_key_exists('subitem', $source['distribution'])) {
             throw new InvalidTemplateDefinitionException('SubitemDistribution subitem boost not defined');
         }
-
+    
         $distribution = new Boost\SubitemDistribution(
             $source['distribution']['root'],
             $source['distribution']['subitem'],
@@ -287,7 +287,7 @@ class TemplateBuilder
         if (!array_key_exists('subitem', $source['distribution'])) {
             throw new InvalidTemplateDefinitionException('SubitemDistribution subitem boost not defined');
         }
-
+    
         $distribution = new Boost\SubitemDistribution(
             $source['distribution']['root'],
             $source['distribution']['subitem'],
