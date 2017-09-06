@@ -29,5 +29,4 @@ class ConstantDistribution extends AbstractDistribution
     {
         return $this->value;
     }
-
 }
