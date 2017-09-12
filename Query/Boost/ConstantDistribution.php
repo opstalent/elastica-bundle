@@ -15,7 +15,6 @@ class ConstantDistribution extends AbstractDistribution
 
     /**
      * @param float $value
-     * @throws \InvalidArgumentException
      */
     public function __construct(float $value)
     {

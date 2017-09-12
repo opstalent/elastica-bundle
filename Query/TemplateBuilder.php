@@ -461,7 +461,7 @@ class TemplateBuilder
      * @param array $source
      * @return Boost\ConstantDistribution
      */
-    private static function resolveConstantDistribution(array $source)
+    private static function resolveConstantDistribution(array $source): Boost\ConstantDistribution
     {
         $distribution = new Boost\ConstantDistribution($source['value']);
         if (array_key_exists('boost', $source)) {
