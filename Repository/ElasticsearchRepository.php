@@ -159,9 +159,8 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
 
             // \FOS\ElasticaBundle\Paginator\RawPaginatorAdapter::getElasticaResults compatibility
             $size = $query->getParam('size');
-            $query->setParam('size', $size + $qb->getQuery()->getParam('from'));
-
-            $from = $query->getParam('from');
+            $from = $qb->getQuery()->hasParam('from') ? $qb->getQuery()->getParam('from') : 0;
+            $query->setParam('size', $size + $from);
             $query->setParam('from', 0);
 
             $paginator = $this->finder->createPaginatorAdapter($query);
