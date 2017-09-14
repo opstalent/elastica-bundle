@@ -155,8 +155,17 @@ class ElasticsearchRepository extends Repository implements ElasticsearchReposit
 
         $result = [];
         if (array_key_exists('count', $data)) {
-            $paginator = $this->finder->createPaginatorAdapter($qb->getQuery());
-            $result['list'] = $paginator->getResults($qb->getQuery()->getParam('from'),$qb->getQuery()->getParam('size'))->toArray();
+            $query = $qb->getQuery();
+
+            // \FOS\ElasticaBundle\Paginator\RawPaginatorAdapter::getElasticaResults compatibility
+            $size = $query->getParam('size');
+            $query->setParam('size', $size + $qb->getQuery()->getParam('from'));
+
+            $from = $query->getParam('from');
+            $query->setParam('from', 0);
+
+            $paginator = $this->finder->createPaginatorAdapter($query);
+            $result['list'] = $paginator->getResults($from, $size)->toArray();
             $result['total'] = $paginator->getTotalHits(true);
             unset($data['count']);
         } else {
