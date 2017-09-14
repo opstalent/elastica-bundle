@@ -413,6 +413,9 @@ class TemplateBuilder
             case 'summary':
                 $distribution = static::resolveSummaryDistribution($source);
                 break;
+            case 'constant':
+                $distribution = static::resolveConstantDistribution($source);
+                break;
             default:
                 throw new InvalidTemplateDefinitionException(sprintf(
                     'Distribution of type "%s" is not valid',
@@ -447,6 +450,20 @@ class TemplateBuilder
     private static function resolveSummaryDistribution(array $source)
     {
         $distribution = new Boost\SummaryDistribution();
+        if (array_key_exists('boost', $source)) {
+            $distribution->setBoost($source['boost']);
+        }
+
+        return $distribution;
+    }
+
+    /**
+     * @param array $source
+     * @return Boost\ConstantDistribution
+     */
+    private static function resolveConstantDistribution(array $source): Boost\ConstantDistribution
+    {
+        $distribution = new Boost\ConstantDistribution($source['value']);
         if (array_key_exists('boost', $source)) {
             $distribution->setBoost($source['boost']);
         }
