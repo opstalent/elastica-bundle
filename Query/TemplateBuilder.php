@@ -80,6 +80,9 @@ class TemplateBuilder
                 }
                 $query = new Query($source['query']);
                 break;
+            case 'exists':
+                $query = static::resolveExistsQuery($source);
+                break;
             default:
                 throw new InvalidTemplateDefinitionException(sprintf(
                     'Query of type "%s" is not valid',
@@ -109,6 +112,11 @@ class TemplateBuilder
         if (array_key_exists('must', $source)) {
             foreach ($source['must'] as $must) {
                 $template->addMust(static::resolveQuery($must));
+            }
+        }
+        if (array_key_exists('must_not', $source)) {
+            foreach ($source['must_not'] as $mustNot) {
+                $template->addMustNot(static::resolveQuery($mustNot));
             }
         }
 
@@ -332,6 +340,21 @@ class TemplateBuilder
         if (array_key_exists('boost_mode', $source)) {
             $template->setBoostMode($source['boost_mode']);
         }
+
+        return $template;
+    }
+
+    /**
+     * @param array $source
+     * @return Template\ExistsTemplate
+     * @throws InvalidTemplateDefinitionException
+     */
+    private static function resolveExistsQuery(array $source): Template\ExistsTemplate
+    {
+        if (!array_key_exists('field', $source)) {
+            throw new InvalidTemplateDefinitionException('field not defined for exists querry');
+        }
+        $template = new Template\ExistsTemplate($source['field']);
 
         return $template;
     }
