@@ -1,5 +1,5 @@
 {
-    "name": "opstalent/elastica-bundle",
+    "name": "ops-talent/elastica-bundle",
     "type": "symfony-bundle",
     "require": {
         "php": "^7",
