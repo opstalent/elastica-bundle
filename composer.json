@@ -3,7 +3,6 @@
     "type": "symfony-bundle",
     "require": {
         "php": "^7",
-        "ops-talent/apibundle": "dev-master",
         "friendsofsymfony/elastica-bundle": "^4.0",
         "symfony/http-kernel": "^3.2",
         "symfony/event-dispatcher": "^3.2",
