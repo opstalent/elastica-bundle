@@ -5,6 +5,7 @@ namespace Opstalent\ElasticaBundle\Query\Template;
 use Opstalent\ElasticaBundle\Query\Boost\AbstractDistributionProvider;
 use Opstalent\ElasticaBundle\Query\Boost\CompoundDistributionProvider;
 use Opstalent\ElasticaBundle\Query\Boost\DistributionProviderFactory;
+use Opstalent\ElasticaBundle\Query\Boost\SummaryDistributionProvider;
 use Opstalent\ElasticaBundle\Query\FieldMapper;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -53,6 +54,10 @@ class TermCollectionTemplateResolver implements TemplateResolverInterface
         $distribution = $this->distributionFactory->getInstance($template->getDistribution());
         if ($distribution instanceof CompoundDistributionProvider) {
             $distribution->setCount(count($source));
+        }
+
+        if ($distribution instanceof SummaryDistributionProvider) {
+            $distribution->setBoostPool($template->getBoost());
         }
 
         foreach ($source as $item) {
