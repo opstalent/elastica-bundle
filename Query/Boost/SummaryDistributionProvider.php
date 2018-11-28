@@ -13,6 +13,6 @@ class SummaryDistributionProvider extends CompoundDistributionProvider
      */
     protected function calculateValue($data, int $iterator, int $count) : float
     {
-        return 1 / $count;
+        return $this->boostPool / $count;
     }
 }

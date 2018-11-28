@@ -19,6 +19,11 @@ abstract class CompoundDistributionProvider extends AbstractDistributionProvider
     protected $iterator = 0;
 
     /**
+     * @var int
+     */
+    protected $boostPool = 1;
+
+    /**
      * {@inheritdoc}
      */
     final public function getValue($data) : float
@@ -56,4 +61,22 @@ abstract class CompoundDistributionProvider extends AbstractDistributionProvider
      * @return float
      */
     abstract protected function calculateValue($data, int $iterator, int $count) : float;
+
+    /**
+     * @return int
+     */
+    public function getBoostPool()
+    {
+        return $this->boostPool;
+    }
+
+    /**
+     * @param int $boostPool
+     * @return CompoundDistributionProvider
+     */
+    public function setBoostPool($boostPool)
+    {
+        $this->boostPool = $boostPool;
+        return $this;
+    }
 }
